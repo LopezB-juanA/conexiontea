@@ -1,0 +1,86 @@
+.pictogramas-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.header {
+    background: rgba(255,255,255,0.95);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header h1 { color: #667eea; }
+
+.nav { display: flex; gap: 1.5rem; align-items: center; }
+.nav-link { color: #64748b; text-decoration: none; font-weight: 500; }
+.nav-link.active { color: #667eea; }
+.btn-logout { padding: 0.5rem 1.5rem; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; }
+
+.main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.search-input, .category-select {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.search-input { flex: 1; min-width: 250px; }
+
+.pictogramas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.pictograma-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    overflow: hidden;  /* ← AGREGAR ESTO */
+    min-height: 180px; /* ← AGREGAR ESTO */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.pictograma-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    line-height: 1;  /* ← AGREGAR ESTO */
+    display: block;  /* ← AGREGAR ESTO */
+}
+
+.pictograma-card h3 {
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;  /* ← AGREGAR ESTO */
+    word-wrap: break-word;  /* ← AGREGAR ESTO */
+    text-align: center;
+}
+
+.categoria {
+    color: #64748b;
+    font-size: 0.85rem;
+    text-transform: capitalize;
+}
+.pictograma-card:hover { transform: translateY(-5px); }
+
+.footer { text-align: center; padding: 2rem; color: white; }
+
+*:focus-visible { outline: 3px solid #667eea; outline-offset: 2px; }

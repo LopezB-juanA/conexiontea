@@ -1,0 +1,91 @@
+.perfil-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.header {
+    background: rgba(255,255,255,0.95);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header h1 { color: #667eea; }
+.nav { display: flex; gap: 1.5rem; align-items: center; }
+.nav-link { color: #64748b; text-decoration: none; font-weight: 500; }
+.nav-link.active { color: #667eea; }
+.btn-logout { padding: 0.5rem 1.5rem; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; }
+
+.main { max-width: 800px; margin: 0 auto; padding: 2rem; }
+
+.perfil-card, .config-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.perfil-card h2, .config-card h2 {
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+.info-item label { color: #64748b; font-size: 0.85rem; margin-bottom: 0.25rem; }
+.info-item span { color: #1e293b; font-weight: 600; }
+
+.config-item { margin-bottom: 1.5rem; }
+.config-item label { display: block; color: #1e293b; font-weight: 500; margin-bottom: 0.5rem; }
+.config-item select, .config-item input[type="range"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.range-input { padding: 0.5rem; }
+
+.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] { width: 18px; height: 18px; }
+
+.btn-guardar-config {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-guardar-config:hover { transform: translateY(-2px); }
+
+.footer { text-align: center; padding: 2rem; color: white; }
+
+*:focus-visible { outline: 3px solid #667eea; outline-offset: 2px; }

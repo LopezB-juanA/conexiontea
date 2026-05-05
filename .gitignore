@@ -1,0 +1,33 @@
+# ============================================
+# CONEXIÓNTEA - .gitignore (RAÍZ PARA GITHUB)
+# ============================================
+
+# Environment Variables (IMPORTANTE: NO subir contraseñas)
+.env
+.env.local
+.env.development
+.env.production
+
+# Node Modules (si hay en la raíz)
+node_modules/
+
+# Build Outputs
+dist/
+build/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database Backups
+Backups/*.sql
+*.sql.backup
+
+# Temporary Files
+tmp/
+temp/

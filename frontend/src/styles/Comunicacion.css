@@ -1,0 +1,102 @@
+.comunicacion-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.header {
+    background: rgba(255,255,255,0.95);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header h1 { color: #667eea; }
+.nav { display: flex; gap: 1.5rem; align-items: center; }
+.nav-link { color: #64748b; text-decoration: none; font-weight: 500; }
+.nav-link.active { color: #667eea; }
+.btn-logout { padding: 0.5rem 1.5rem; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; }
+
+.main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+.frase-construida {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    min-height: 150px;
+}
+
+.frase-construida h2 { color: #1e293b; margin-bottom: 1rem; }
+
+.frase-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 80px;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.vacio { color: #94a3b8; font-style: italic; }
+
+.frase-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: #667eea;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.frase-item:hover { background: #764ba2; }
+.emoji { font-size: 1.5rem; }
+.texto { font-size: 0.85rem; margin-top: 0.25rem; }
+
+.frase-actions { display: flex; gap: 1rem; }
+.btn-limpiar, .btn-guardar {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-limpiar { background: #f1f5f9; color: #64748b; }
+.btn-guardar { background: #22c55e; color: white; }
+.btn-guardar:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.pictogramas-disponibles h2 { color: white; margin-bottom: 1rem; }
+
+.pictogramas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.pictograma-btn {
+    background: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pictograma-btn:hover { transform: translateY(-3px); }
+.emoji { font-size: 2rem; }
+.texto { font-size: 0.85rem; color: #64748b; margin-top: 0.25rem; }
+
+.footer { text-align: center; padding: 2rem; color: white; }
+
+*:focus-visible { outline: 3px solid #667eea; outline-offset: 2px; }

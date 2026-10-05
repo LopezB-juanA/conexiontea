@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Pictogramas from './pages/Pictogramas';
 import Comunicacion from './pages/Comunicacion';
 import Perfil from './pages/Perfil';
+import Historial from './pages/Historial';
 
 function App() {
     const estaAutenticado = () => localStorage.getItem('token') !== null;
@@ -27,6 +28,10 @@ function App() {
                 <Route 
                     path="/comunicacion" 
                     element={estaAutenticado() ? <Comunicacion /> : <Navigate to="/login" />} 
+                />
+                <Route
+                    path="/historial"
+                    element={estaAutenticado() ? <Historial /> : <Navigate to="/login" />}
                 />
                 <Route 
                     path="/perfil" 

@@ -8,7 +8,7 @@ function Dashboard() {
     const [usuario, setUsuario] = useState(null);
 
     useEffect(() => {
-        const usuarioGuardado = JSON.parse(localStorage.getItem('usuario') || '{}');
+        const usuarioGuardado = JSON.parse(localStorage.getItem('usuario') );
         setUsuario(usuarioGuardado);
     }, []);
 
@@ -30,6 +30,7 @@ function Dashboard() {
                         <a href="/dashboard" className="nav-link active">Inicio</a>
                         <a href="/pictogramas" className="nav-link">Pictogramas</a>
                         <a href="/comunicacion" className="nav-link">Comunicación</a>
+                          <a href="/historial" className="nav-link">Historial</a>
                         <a href="/perfil" className="nav-link">Perfil</a>
                     </nav>
                     <button onClick={handleLogout} className="btn-logout">
@@ -45,24 +46,31 @@ function Dashboard() {
                 </div>
 
                 <div className="cards-container">
-                    <div className="card" onClick={() => navigate('/pictogramas')}>
-                        <div className="card-icon">📚</div>
-                        <h3>Pictogramas</h3>
-                        <p>Explora el catálogo de pictogramas disponibles</p>
-                    </div>
+  <div className="card" onClick={() => navigate('/pictogramas')}>
+    <div className="card-icon">📚</div>
+    <h3>Pictogramas</h3>
+    <p>Explora el catálogo de pictogramas disponibles</p>
+  </div>
 
-                    <div className="card" onClick={() => navigate('/comunicacion')}>
-                        <div className="card-icon">💬</div>
-                        <h3>Comunicación</h3>
-                        <p>Construye frases usando pictogramas</p>
-                    </div>
+  <div className="card" onClick={() => navigate('/comunicacion')}>
+    <div className="card-icon">💬</div>
+    <h3>Comunicación</h3>
+    <p>Construye frases usando pictogramas</p>
+  </div>
 
-                    <div className="card" onClick={() => navigate('/perfil')}>
-                        <div className="card-icon">⚙️</div>
-                        <h3>Perfil</h3>
-                        <p>Configura tu accesibilidad y preferencias</p>
-                    </div>
-                </div>
+  {/* Nueva tarjeta de Historial */}
+  <div className="card" onClick={() => navigate('/historial')}>
+    <div className="card-icon">📋</div>
+    <h3>Historial</h3>
+    <p>Revisa el registro de comunicaciones</p>
+  </div>
+
+  <div className="card" onClick={() => navigate('/perfil')}>
+    <div className="card-icon">⚙️</div>
+    <h3>Perfil</h3>
+    <p>Configura tu accesibilidad y preferencias</p>
+  </div>
+</div>
 
                 <div className="stats-card">
                     <h3>📊 Tu Progreso</h3>

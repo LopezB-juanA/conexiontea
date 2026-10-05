@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
+const temaGuardado = localStorage.getItem('tema');
+if (temaGuardado && temaGuardado !== 'azul') {
+    document.documentElement.setAttribute('data-theme', temaGuardado);
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />

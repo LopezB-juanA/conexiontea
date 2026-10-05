@@ -14,6 +14,24 @@ function Perfil() {
         sonidos: true,
         tiempoEspera: 3000
     });
+    const [tema, setTema] = useState(localStorage.getItem('tema') || 'azul');
+
+const cambiarTema = (nuevoTema) => {
+    setTema(nuevoTema);
+    localStorage.setItem('tema', nuevoTema);
+    
+    if (nuevoTema === 'azul') {
+        document.documentElement.removeAttribute('data-theme');
+    } else {
+        document.documentElement.setAttribute('data-theme', nuevoTema);
+    }
+};
+
+useEffect(() => {
+    if (tema !== 'azul') {
+        document.documentElement.setAttribute('data-theme', tema);
+    }
+}, []);
 
     useEffect(() => {
         const usuarioGuardado = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -127,6 +145,59 @@ function Perfil() {
                             Sonidos Activos
                         </label>
                     </div>
+                    
+                    <div className="stats-card" style={{ marginBottom: '2rem' }}>
+    <h3>🎨 Tema de Color</h3>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
+        <button 
+            onClick={() => cambiarTema('azul')}
+            style={{
+                padding: '1rem',
+                background: tema === 'azul' ? '#4f46e5' : '#f8fafc',
+                color: tema === 'azul' ? 'white' : '#0f172a',
+                border: '2px solid #4f46e5',
+                borderRadius: '12px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s'
+            }}
+        >
+            🔵 Azul
+        </button>
+        
+        <button 
+            onClick={() => cambiarTema('verde')}
+            style={{
+                padding: '1rem',
+                background: tema === 'verde' ? '#059669' : '#f0fdf4',
+                color: tema === 'verde' ? 'white' : '#14532d',
+                border: '2px solid #059669',
+                borderRadius: '12px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s'
+            }}
+        >
+            🟢 Verde
+        </button>
+        
+        <button 
+            onClick={() => cambiarTema('calido')}
+            style={{
+                padding: '1rem',
+                background: tema === 'calido' ? '#ea580c' : '#fff7ed',
+                color: tema === 'calido' ? 'white' : '#431407',
+                border: '2px solid #ea580c',
+                borderRadius: '12px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s'
+            }}
+        >
+            🟠 Cálido
+        </button>
+    </div>
+</div>
 
                     <button onClick={guardarConfiguracion} className="btn-guardar-config">
                         💾 Guardar Configuración

@@ -11,35 +11,40 @@ function Login() {
     const [mensaje, setMensaje] = useState({ tipo: '', texto: '' });
     const [cargando, setCargando] = useState(false);
 
-    const handleSubmit = async (e) => {
-    e.preventDefault();  // ← ¿Está esta línea?
-    setMensaje({ tipo: '', texto: '' });
-    setCargando(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setMensaje({ tipo: '', texto: '' });
+  setCargando(true);
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+  try {
+    // 1. Conectar con el backend
+    const response = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.email, password: formData.password })
+    });
 
-    if (formData.email && formData.password.length >= 6) {
-        const usuarioMock = {
-            id: 1,
-            email: formData.email,
-            nombre: formData.email.split('@')[0],
-            rol: 'usuario_final'
-        };
-        
-        localStorage.setItem('token', 'mock-token-12345');
-        localStorage.setItem('usuario', JSON.stringify(usuarioMock));
-        
-        if (modoRegistro) {
-            setMensaje({ tipo: 'success', texto: '✅ Registro exitoso. Inicia sesión.' });
-            setModoRegistro(false);
-        } else {
-            navigate('/dashboard');  // ← ¿Está esta línea?
-        }
-    } else {
-        setMensaje({ tipo: 'error', texto: '❌ Email o contraseña inválidos (mínimo 6 caracteres)' });
+    const data = await response.json();
+
+    // 2. Si hay error, mostrarlo y detener
+    if (!response.ok) {
+      setMensaje({ tipo: 'error', texto: data.error || 'Credenciales inválidas' });
+      setCargando(false);
+      return;
     }
-    
+
+    // 3. Guardar datos reales
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+    // 4. Navegar al dashboard
+    navigate('/dashboard');
+
+  } catch (error) {
+    console.error('Error de conexión:', error);
+    setMensaje({ tipo: 'error', texto: 'No se pudo conectar con el servidor' });
     setCargando(false);
+  }
 };
 
     return (

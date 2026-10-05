@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Comunicacion.css';
+import { io } from 'socket.io-client';
+import { useEffect, useRef } from 'react';
 
 const pictogramasMock = [
     { id: 1, emoji: '😊', texto: 'Feliz' },
@@ -15,9 +17,11 @@ const pictogramasMock = [
 ];
 
 function Comunicacion() {
+    const datosUsuario = JSON.parse(localStorage.getItem('usuario'));
     const navigate = useNavigate();
     const [frase, setFrase] = useState([]);
-
+    const socket = io('http://localhost:5000');
+const socketRef = useRef(socket);
     // ✅ FUNCIÓN DE LOGOUT CON CONFIRMACIÓN
     const handleLogout = () => {
         if (window.confirm('¿Estás seguro de cerrar sesión?')) {
@@ -38,10 +42,28 @@ function Comunicacion() {
         setFrase([]);
     };
 
-    const guardarComunicacion = () => {
-        alert('✅ Comunicación guardada (Mock - Fase 1)');
-        limpiarFrase();
+    useEffect(() => {
+    const socket = socketRef.current;
+
+    socket.on('recibir_mensaje', (data) => {
+    console.log('Mensaje recibido en tiempo real:', data);
+        });
+
+    return () => {
+    socket.off('recibir_mensaje');
     };
+    }, []);
+
+const guardarComunicacion = () => {
+  const mensaje = {
+    usuarioId: datosUsuario.id,
+    frase: frase,
+    timestamp: new Date().toISOString()
+  };
+
+  socket.emit('enviar_mensaje', mensaje);
+  setFrase([]);
+};
 
     return (
         <div className="comunicacion-container">
@@ -55,13 +77,20 @@ function Comunicacion() {
                     <button onClick={handleLogout} className="btn-logout">
                         Cerrar Sesión
                     </button>
+                    <button onClick={limpiarFrase} className="btn-limpiar">
+                        <span aria-hidden="true">🗑️</span> Limpiar
+                    </button>
+
+                    <button onClick={guardarComunicacion} className="btn-guardar" disabled={frase.length === 0}>
+                        <span aria-hidden="true">💾</span> Guardar
+                    </button>
                 </nav>
             </header>
 
             <main className="main">
                 <div className="frase-construida">
                     <h2>📝 Tu Frase:</h2>
-                    <div className="frase-container">
+                    <div className="frase-container" aria-live="polite">
                         {frase.length === 0 ? (
                             <p className="vacio">Selecciona pictogramas para construir tu frase</p>
                         ) : (

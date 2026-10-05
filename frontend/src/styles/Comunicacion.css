@@ -93,10 +93,60 @@
     align-items: center;
 }
 
+/* Cuando el usuario hace clic (presiona el botón) */
+.pictograma-btn:active {
+    transform: translateY(0px) scale(0.95); /* Vuelve a su posición y se encoge un poco */
+    background-color: #e0e7ff; /* Fondo azul clarito para confirmar la acción */
+}
+
+/* Cuando el usuario navega con teclado (Tab) */
+.pictograma-btn:focus {
+    outline: 3px solid #3b82f6; /* Borde azul grueso para ver qué botón está enfocado */
+    outline-offset: 2px; /* El borde aparece un poco separado del botón */
+}
+
+/* Estado cuando el pictograma está seleccionado/agregado */
+.pictograma-btn.seleccionado {
+    background-color: #bfdbfe; /* Fondo azul más evidente */
+    border: 2px solid #3b82f6; /* Borde azul para destacar */
+    transform: scale(1.05); /* Un poco más grande */
+}
+
 .pictograma-btn:hover { transform: translateY(-3px); }
 .emoji { font-size: 2rem; }
-.texto { font-size: 0.85rem; color: #64748b; margin-top: 0.25rem; }
+.texto {
+    font-size: 1.1rem; /* Aumentado para mejor legibilidad */
+    color: #1e293b; /* Gris muy oscuro, casi negro. Cumple contraste 12:1 */
+    margin-top: 0.25rem;
+    font-family: 'Verdana', 'Arial', sans-serif; /* Fuentes claras y sin serifas, recomendadas para TEA */
+    font-weight: 600; /* Un poco más de peso para destacar */
+}
 
 .footer { text-align: center; padding: 2rem; color: white; }
 
 *:focus-visible { outline: 3px solid #667eea; outline-offset: 2px; }
+
+/* Estilos para cuando el botón de Guardar está deshabilitado */
+.btn-guardar:disabled {
+    opacity: 0.5; /* Lo hace medio transparente */
+    background-color: #d1d5db; /* Fondo gris */
+    color: #6b7280; /* Texto gris oscuro */
+    cursor: not-allowed; /* Cambia el cursor a un círculo con raya (prohibido) */
+}
+
+.btn-limpiar:focus,
+.btn-guardar:focus {
+    outline: 3px solid #2563eb;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pictograma-btn {
+        transition: none;
+    }
+    .pictograma-btn:hover,
+    .pictograma-btn:active,
+    .pictograma-btn.seleccionado {
+        transform: none;
+    }
+}

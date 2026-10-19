@@ -203,10 +203,6 @@ body {
     }
 }
 
-*, *::before, *::after {
-    border-inline: none !important;
-}
-
 body, #root, .login-container, .login-card {
     border-inline: none !important;
     border-left: none !important;

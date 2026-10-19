@@ -1,92 +1,119 @@
-// src/pages/Pictogramas.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Pictogramas.css';
-
-const pictogramasMock = [
-    { id: 1, codigo: 'ARA-001', categoria: 'emociones', etiquetas: 'feliz, alegria', ruta: '😊' },
-    { id: 2, codigo: 'ARA-002', categoria: 'emociones', etiquetas: 'triste, llanto', ruta: '😢' },
-    { id: 3, codigo: 'ARA-003', categoria: 'acciones', etiquetas: 'comer, hambre', ruta: '🍎' },
-    { id: 4, codigo: 'ARA-004', categoria: 'acciones', etiquetas: 'beber, sed', ruta: '💧' },
-    { id: 5, codigo: 'ARA-005', categoria: 'personas', etiquetas: 'familia, madre', ruta: '👨‍👧' },
-    { id: 6, codigo: 'ARA-006', categoria: 'lugares', etiquetas: 'casa, hogar', ruta: '🏠' },
-    { id: 7, codigo: 'ARA-007', categoria: 'objetos', etiquetas: 'juguete, juego', ruta: '⚽' },
-    { id: 8, codigo: 'ARA-008', categoria: 'acciones', etiquetas: 'dormir, descanso', ruta: '😴' },
-];
+import '../styles/Dashboard.css';
 
 function Pictogramas() {
     const navigate = useNavigate();
-    const [busqueda, setBusqueda] = useState('');
-    const [categoria, setCategoria] = useState('todas');
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const [modo, setModo] = useState(localStorage.getItem('modo') || 'claro');
+    const [tema, setTema] = useState(localStorage.getItem('tema') || 'azul');
 
-    // ✅ FUNCIÓN DE LOGOUT CON CONFIRMACIÓN
-    const handleLogout = () => {
-        if (window.confirm('¿Estás seguro de cerrar sesión?')) {
-            localStorage.clear();
-            navigate('/login');
+    const pictogramas = [
+        { id: 1, texto: 'Feliz', emoji: '😊', categoria: 'emociones' },
+        { id: 2, texto: 'Triste', emoji: '😢', categoria: 'emociones' },
+        { id: 3, texto: 'Comer', emoji: '🍎', categoria: 'acciones' },
+        { id: 4, texto: 'Beber', emoji: '💧', categoria: 'acciones' },
+        { id: 5, texto: 'Casa', emoji: '🏠', categoria: 'lugares' },
+        { id: 6, texto: 'Jugar', emoji: '🎮', categoria: 'acciones' },
+        { id: 7, texto: 'Dormir', emoji: '😴', categoria: 'acciones' },
+        { id: 8, texto: 'Familia', emoji: '👨‍👩', categoria: 'personas' }
+    ];
+
+    useEffect(() => {
+        if (modo === 'oscuro') {
+            document.documentElement.setAttribute('data-mode', 'oscuro');
+        } else {
+            document.documentElement.removeAttribute('data-mode');
         }
+        localStorage.setItem('modo', modo);
+    }, [modo]);
+
+    useEffect(() => {
+        if (tema === 'azul') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', tema);
+        }
+        localStorage.setItem('tema', tema);
+    }, [tema]);
+
+    const toggleModo = () => setModo(modo === 'claro' ? 'oscuro' : 'claro');
+
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login');
     };
 
-    const filtrarPictogramas = () => {
-        return pictogramasMock.filter(p => {
-            const matchBusqueda = p.etiquetas.toLowerCase().includes(busqueda.toLowerCase());
-            const matchCategoria = categoria === 'todas' || p.categoria === categoria;
-            return matchBusqueda && matchCategoria;
-        });
-    };
+    const [fontSize] = useState(parseInt(localStorage.getItem('fontSize')) || 16);
+const [contraste] = useState(localStorage.getItem('contrast') || 'normal');
+const [animaciones] = useState(localStorage.getItem('animaciones') !== 'off');
+
+useEffect(() => {
+    document.documentElement.style.setProperty('--font-size', fontSize + 'px');
+    if (contraste === 'alto') {
+        document.documentElement.setAttribute('data-contrast', 'alto');
+    } else {
+        document.documentElement.removeAttribute('data-contrast');
+    }
+    if (!animaciones) {
+        document.documentElement.setAttribute('data-no-animations', 'true');
+    } else {
+        document.documentElement.removeAttribute('data-no-animations');
+    }
+}, []);
 
     return (
         <div className="pictogramas-container">
-            <header className="header">
-                <h1>🧩 ConexiónTEA</h1>
-                <nav className="nav">
-                    <a href="/dashboard" className="nav-link">Inicio</a>
-                    <a href="/pictogramas" className="nav-link active">Pictogramas</a>
-                    <a href="/comunicacion" className="nav-link">Comunicación</a>
-                    <a href="/perfil" className="nav-link">Perfil</a>
-                    <button onClick={handleLogout} className="btn-logout">
-                        Cerrar Sesión
-                    </button>
-                </nav>
+            <header className="dashboard-header">
+                <div className="header-content">
+                    <h1>🧩 ConexiónTEA</h1>
+                    <nav className="dashboard-nav">
+                        <a href="/dashboard" className="nav-link">Inicio</a>
+                        <a href="/pictogramas" className="nav-link active">Pictogramas</a>
+                        <a href="/comunicacion" className="nav-link">Comunicación</a>
+                        <a href="/historial" className="nav-link">Historial</a>
+                        <a href="/perfil" className="nav-link">Perfil</a>
+                    </nav>
+                    <div className="header-actions">
+                        <button onClick={toggleModo} className="btn-modo">
+                            {modo === 'oscuro' ? '☀️ Claro' : '🌙 Oscuro'}
+                        </button>
+                        <button onClick={handleLogout} className="btn-logout">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
             </header>
 
-            <main className="main">
-                <div className="filters">
-                    <input
-                        type="text"
-                        placeholder="🔍 Buscar pictograma..."
-                        value={busqueda}
-                        onChange={(e) => setBusqueda(e.target.value)}
-                        className="search-input"
-                        aria-label="Buscar pictograma"
-                    />
-                    <select
-                        value={categoria}
-                        onChange={(e) => setCategoria(e.target.value)}
-                        className="category-select"
-                        aria-label="Filtrar por categoría"
-                    >
-                        <option value="todas">Todas las categorías</option>
-                        <option value="emociones">Emociones</option>
-                        <option value="acciones">Acciones</option>
-                        <option value="personas">Personas</option>
-                        <option value="lugares">Lugares</option>
-                        <option value="objetos">Objetos</option>
-                    </select>
-                </div>
-
-                <div className="pictogramas-grid">
-                    {filtrarPictogramas().map(p => (
-                        <div key={p.id} className="pictograma-card" tabIndex="0" aria-label={p.etiquetas}>
-                            <div className="pictograma-icon">{p.ruta}</div>
-                            <h3>{p.etiquetas.split(',')[0]}</h3>
-                            <p className="categoria">{p.categoria}</p>
+            <main className="dashboard-main">
+                <h2 style={{ color: 'var(--text-primary)', marginBottom: '1.5rem' }}>
+                    🖼️ Catálogo de Pictogramas
+                </h2>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+                    gap: '1.5rem'
+                }}>
+                    {pictogramas.map(p => (
+                        <div key={p.id} style={{
+                            background: 'var(--card-bg)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '12px',
+                            padding: '1.5rem',
+                            textAlign: 'center',
+                            cursor: 'pointer'
+                        }}>
+                            <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>{p.emoji}</div>
+                            <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem' }}>{p.texto}</h3>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'capitalize' }}>
+                                {p.categoria}
+                            </p>
                         </div>
                     ))}
                 </div>
             </main>
 
-            <footer className="footer">
+            <footer className="dashboard-footer">
                 <p>ConexiónTEA © 2026 - Porque cada voz merece ser escuchada</p>
             </footer>
         </div>

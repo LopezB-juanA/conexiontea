@@ -6,6 +6,7 @@ import Pictogramas from './pages/Pictogramas';
 import Comunicacion from './pages/Comunicacion';
 import Perfil from './pages/Perfil';
 import Historial from './pages/Historial';
+import './styles/Dashboard.css';
 
 function App() {
     const estaAutenticado = () => localStorage.getItem('token') !== null;

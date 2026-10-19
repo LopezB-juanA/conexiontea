@@ -1,211 +1,303 @@
-// src/pages/Perfil.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Perfil.css';
+import '../styles/Dashboard.css';
 
 function Perfil() {
     const navigate = useNavigate();
-    const [usuario, setUsuario] = useState(null);
-    const [config, setConfig] = useState({
-        esquemaColores: 'claro',
-        tamañoFuente: 16,
-        contraste: 'normal',
-        animaciones: true,
-        sonidos: true,
-        tiempoEspera: 3000
-    });
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const [modo, setModo] = useState(localStorage.getItem('modo') || 'claro');
     const [tema, setTema] = useState(localStorage.getItem('tema') || 'azul');
-
-const cambiarTema = (nuevoTema) => {
-    setTema(nuevoTema);
-    localStorage.setItem('tema', nuevoTema);
-    
-    if (nuevoTema === 'azul') {
-        document.documentElement.removeAttribute('data-theme');
-    } else {
-        document.documentElement.setAttribute('data-theme', nuevoTema);
-    }
-};
-
-useEffect(() => {
-    if (tema !== 'azul') {
-        document.documentElement.setAttribute('data-theme', tema);
-    }
-}, []);
+    const [fontSize, setFontSize] = useState(parseInt(localStorage.getItem('fontSize')) || 16);
+    const [contraste, setContraste] = useState(localStorage.getItem('contrast') || 'normal');
+    const [animaciones, setAnimaciones] = useState(localStorage.getItem('animaciones') !== 'off');
+    const [sonidos, setSonidos] = useState(localStorage.getItem('sonidos') !== 'off');
 
     useEffect(() => {
-        const usuarioGuardado = JSON.parse(localStorage.getItem('usuario') || '{}');
-        setUsuario(usuarioGuardado);
-    }, []);
-
-    // ✅ FUNCIÓN DE LOGOUT CON CONFIRMACIÓN
-    const handleLogout = () => {
-        if (window.confirm('¿Estás seguro de cerrar sesión?')) {
-            localStorage.clear();
-            navigate('/login');
+        if (modo === 'oscuro') {
+            document.documentElement.setAttribute('data-mode', 'oscuro');
+        } else {
+            document.documentElement.removeAttribute('data-mode');
         }
-    };
+        localStorage.setItem('modo', modo);
+    }, [modo]);
 
-    const guardarConfiguracion = () => {
-        localStorage.setItem('configuracion', JSON.stringify(config));
-        alert('✅ Configuración guardada (Mock - Fase 1)');
+    useEffect(() => {
+        if (tema === 'azul') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', tema);
+        }
+        localStorage.setItem('tema', tema);
+    }, [tema]);
+
+    useEffect(() => {
+        document.documentElement.style.setProperty('--font-size', fontSize + 'px');
+        localStorage.setItem('fontSize', fontSize);
+    }, [fontSize]);
+
+    useEffect(() => {
+        if (contraste === 'alto') {
+            document.documentElement.setAttribute('data-contrast', 'alto');
+        } else {
+            document.documentElement.removeAttribute('data-contrast');
+        }
+        localStorage.setItem('contrast', contraste);
+    }, [contraste]);
+
+    useEffect(() => {
+        localStorage.setItem('animaciones', animaciones ? 'on' : 'off');
+        if (!animaciones) {
+            document.documentElement.setAttribute('data-no-animations', 'true');
+        } else {
+            document.documentElement.removeAttribute('data-no-animations');
+        }
+    }, [animaciones]);
+
+    useEffect(() => {
+        localStorage.setItem('sonidos', sonidos ? 'on' : 'off');
+    }, [sonidos]);
+
+    const toggleModo = () => setModo(modo === 'claro' ? 'oscuro' : 'claro');
+
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login');
     };
 
     return (
         <div className="perfil-container">
-            <header className="header">
-                <h1>🧩 ConexiónTEA</h1>
-                <nav className="nav">
-                    <a href="/dashboard" className="nav-link">Inicio</a>
-                    <a href="/pictogramas" className="nav-link">Pictogramas</a>
-                    <a href="/comunicacion" className="nav-link">Comunicación</a>
-                    <a href="/perfil" className="nav-link active">Perfil</a>
-                    <button onClick={handleLogout} className="btn-logout">
-                        Cerrar Sesión
-                    </button>
-                </nav>
+            <header className="dashboard-header">
+                <div className="header-content">
+                    <h1> ConexiónTEA</h1>
+                    <nav className="dashboard-nav">
+                        <a href="/dashboard" className="nav-link">Inicio</a>
+                        <a href="/pictogramas" className="nav-link">Pictogramas</a>
+                        <a href="/comunicacion" className="nav-link">Comunicación</a>
+                        <a href="/historial" className="nav-link">Historial</a>
+                        <a href="/perfil" className="nav-link active">Perfil</a>
+                    </nav>
+                    <div className="header-actions">
+                        <button onClick={toggleModo} className="btn-modo">
+                            {modo === 'oscuro' ? '☀️ Claro' : '🌙 Oscuro'}
+                        </button>
+                        <button onClick={handleLogout} className="btn-logout">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
             </header>
 
-            <main className="main">
-                <div className="perfil-card">
-                    <h2>👤 Información del Usuario</h2>
-                    <div className="info-grid">
-                        <div className="info-item">
-                            <label>Nombre:</label>
-                            <span>{usuario?.nombre || 'Usuario'}</span>
+            <main style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem' }}>
+                {/* Título */}
+                <div style={{
+                    background: 'var(--primary)',
+                    color: 'white',
+                    padding: '2rem',
+                    
+                    borderRadius: '8px',
+                    textAlign: 'center',
+                    marginBottom: '2rem'
+                }}>
+                    <h2 style={{ color: 'white', fontSize: '1.8rem', marginBottom: '0.5rem' }}>⚙️ Configuración de Accesibilidad</h2>
+                </div>
+
+                {/* Información de la cuenta */}
+                <div style={{
+                    background: 'var(--card-bg)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    padding: '2rem',
+                    marginBottom: '2rem'
+                }}>
+                    <h3 style={{
+                        color: 'var(--text-primary)',
+                        textAlign: 'center',
+                        marginBottom: '1.5rem',
+                        fontSize: '1.3rem'
+                    }}>Información de la cuenta</h3>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{
+                            padding: '1.2rem',
+                            background: 'var(--bg)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '8px'
+                        }}>
+                            <strong style={{ color: 'var(--text-secondary)', fontSize: '1rem', display: 'block', marginBottom: '0.3rem' }}>Nombre:</strong>
+                            <p style={{ color: 'var(--text-primary)', fontSize: '1.1rem', margin: 0 }}>{usuario?.nombre || 'Usuario'}</p>
                         </div>
-                        <div className="info-item">
-                            <label>Email:</label>
-                            <span>{usuario?.email || 'usuario@ejemplo.com'}</span>
+                        <div style={{
+                            padding: '1.2rem',
+                            background: 'var(--bg)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '8px'
+                        }}>
+                            <strong style={{ color: 'var(--text-secondary)', fontSize: '1rem', display: 'block', marginBottom: '0.3rem' }}>Correo electrónico:</strong>
+                            <p style={{ color: 'var(--text-primary)', fontSize: '1.1rem', margin: 0 }}>{usuario?.email || 'usuario@ejemplo.com'}</p>
                         </div>
-                        <div className="info-item">
-                            <label>Rol:</label>
-                            <span>{usuario?.rol || 'usuario_final'}</span>
+                        <div style={{
+                            padding: '1.2rem',
+                            background: 'var(--bg)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '8px'
+                        }}>
+                            <strong style={{ color: 'var(--text-secondary)', fontSize: '1rem', display: 'block', marginBottom: '0.3rem' }}>Rol:</strong>
+                            <p style={{ color: 'var(--text-primary)', fontSize: '1.1rem', margin: 0, textTransform: 'capitalize' }}>{usuario?.rol || 'Usuario'}</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="config-card">
-                    <h2>⚙️ Configuración de Accesibilidad</h2>
-                    
-                    <div className="config-item">
-                        <label>Esquema de Colores:</label>
+                {/* Configuración de Accesibilidad */}
+                <div style={{
+                    background: 'var(--card-bg)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    padding: '2rem',
+                    marginBottom: '2rem'
+                }}>
+                    <h3 style={{
+                        color: 'var(--text-primary)',
+                        textAlign: 'center',
+                        marginBottom: '1.5rem',
+                        fontSize: '1.3rem'
+                    }}>⚙️ Configuración de Accesibilidad</h3>
+
+                    {/* Esquema de Colores */}
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Esquema de Colores:</label>
                         <select
-                            value={config.esquemaColores}
-                            onChange={(e) => setConfig({...config, esquemaColores: e.target.value})}
+                            value={modo}
+                            onChange={(e) => setModo(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.8rem',
+                                background: 'var(--bg)',
+                                color: 'var(--text-primary)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '8px',
+                                fontSize: '1rem'
+                            }}
                         >
                             <option value="claro">Claro</option>
                             <option value="oscuro">Oscuro</option>
-                            <option value="alto-contraste">Alto Contraste</option>
                         </select>
                     </div>
 
-                    <div className="config-item">
-                        <label>Tamaño de Fuente: {config.tamañoFuente}px</label>
+                    {/* Tamaño de Fuente */}
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
+                            Tamaño de Fuente: {fontSize}px
+                        </label>
                         <input
                             type="range"
                             min="12"
                             max="24"
-                            value={config.tamañoFuente}
-                            onChange={(e) => setConfig({...config, tamañoFuente: parseInt(e.target.value)})}
-                            className="range-input"
+                            value={fontSize}
+                            onChange={(e) => setFontSize(parseInt(e.target.value))}
+                            style={{ width: '100%' }}
                         />
                     </div>
 
-                    <div className="config-item">
-                        <label>Nivel de Contraste:</label>
+                    {/* Nivel de Contraste */}
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <label style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Nivel de Contraste:</label>
                         <select
-                            value={config.contraste}
-                            onChange={(e) => setConfig({...config, contraste: e.target.value})}
+                            value={contraste}
+                            onChange={(e) => setContraste(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.8rem',
+                                background: 'var(--bg)',
+                                color: 'var(--text-primary)',
+                                border: '1px solid var(--border)',
+                                borderRadius: '8px',
+                                fontSize: '1rem'
+                            }}
                         >
                             <option value="normal">Normal</option>
                             <option value="alto">Alto</option>
-                            <option value="muy-alto">Muy Alto</option>
                         </select>
                     </div>
 
-                    <div className="config-item checkbox">
-                        <label>
+                    {/* Animaciones */}
+                    <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                             <input
                                 type="checkbox"
-                                checked={config.animaciones}
-                                onChange={(e) => setConfig({...config, animaciones: e.target.checked})}
+                                checked={animaciones}
+                                onChange={(e) => setAnimaciones(e.target.checked)}
+                                style={{ width: '18px', height: '18px' }}
                             />
                             Animaciones Activas
                         </label>
                     </div>
 
-                    <div className="config-item checkbox">
-                        <label>
+                    {/* Sonidos */}
+                    <div>
+                        <label style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
                             <input
                                 type="checkbox"
-                                checked={config.sonidos}
-                                onChange={(e) => setConfig({...config, sonidos: e.target.checked})}
+                                checked={sonidos}
+                                onChange={(e) => setSonidos(e.target.checked)}
+                                style={{ width: '18px', height: '18px' }}
                             />
                             Sonidos Activos
                         </label>
                     </div>
-                    
-                    <div className="stats-card" style={{ marginBottom: '2rem' }}>
-    <h3>🎨 Tema de Color</h3>
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
-        <button 
-            onClick={() => cambiarTema('azul')}
-            style={{
-                padding: '1rem',
-                background: tema === 'azul' ? '#4f46e5' : '#f8fafc',
-                color: tema === 'azul' ? 'white' : '#0f172a',
-                border: '2px solid #4f46e5',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s'
-            }}
-        >
-            🔵 Azul
-        </button>
-        
-        <button 
-            onClick={() => cambiarTema('verde')}
-            style={{
-                padding: '1rem',
-                background: tema === 'verde' ? '#059669' : '#f0fdf4',
-                color: tema === 'verde' ? 'white' : '#14532d',
-                border: '2px solid #059669',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s'
-            }}
-        >
-            🟢 Verde
-        </button>
-        
-        <button 
-            onClick={() => cambiarTema('calido')}
-            style={{
-                padding: '1rem',
-                background: tema === 'calido' ? '#ea580c' : '#fff7ed',
-                color: tema === 'calido' ? 'white' : '#431407',
-                border: '2px solid #ea580c',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s'
-            }}
-        >
-            🟠 Cálido
-        </button>
-    </div>
-</div>
+                </div>
 
-                    <button onClick={guardarConfiguracion} className="btn-guardar-config">
-                        💾 Guardar Configuración
-                    </button>
+                {/* Tema de Color */}
+                <div style={{
+                    background: 'var(--card-bg)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    padding: '2rem'
+                }}>
+                    <h3 style={{
+                        color: 'var(--text-primary)',
+                        textAlign: 'center',
+                        marginBottom: '0.5rem',
+                        fontSize: '1.3rem'
+                    }}>Tema de Color</h3>
+                    <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '1rem' }}>
+                        Personaliza la apariencia de la aplicación
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                        <button onClick={() => setTema('azul')} style={{
+                            padding: '1rem',
+                            background: tema === 'azul' ? 'var(--primary)' : 'var(--bg)',
+                            color: tema === 'azul' ? 'white' : 'var(--text-primary)',
+                            border: '2px solid var(--primary)',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontWeight: '600',
+                            fontSize: '1rem'
+                        }}> 🔵Azul</button>
+                        <button onClick={() => setTema('verde')} style={{
+                            padding: '1rem',
+                            background: tema === 'verde' ? 'var(--primary)' : 'var(--bg)',
+                            color: tema === 'verde' ? 'white' : 'var(--text-primary)',
+                            border: '2px solid var(--primary)',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontWeight: '600',
+                            fontSize: '1rem'
+                        }}>🟢 Verde</button>
+                        <button onClick={() => setTema('calido')} style={{
+                            padding: '1rem',
+                            background: tema === 'calido' ? 'var(--primary)' : 'var(--bg)',
+                            color: tema === 'calido' ? 'white' : 'var(--text-primary)',
+                            border: '2px solid var(--primary)',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontWeight: '600',
+                            fontSize: '1rem'
+                        }}> 🟠Cálido</button>
+                    </div>
                 </div>
             </main>
 
-            <footer className="footer">
+            <footer className="dashboard-footer">
                 <p>ConexiónTEA © 2026 - Porque cada voz merece ser escuchada</p>
             </footer>
         </div>
